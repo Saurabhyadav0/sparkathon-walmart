@@ -21,11 +21,9 @@ Follow these steps to run the project locally.
 First, clone the project to your local machine:
 
 ```bash
-git clone https://github.com/your-username/smart-waste-dashboard.git
+[git clone https://github.com/your-username/smart-waste-dashboard.git]
 cd smart-waste-dashboard
 ````
-
-*(Replace `your-username` with your GitHub username or repo owner.)*
 
 ---
 
@@ -45,6 +43,9 @@ bun install
 
 ---
 
+
+* Update env *
+
 ### 3. Run the Backend (FastAPI)
 
 In a **new terminal window/tab**, start the backend server:
@@ -57,7 +58,7 @@ uvicorn app:app --reload --port 8000
 ✅ The backend will be running at:
 
 ```
-http://localhost:8000
+[http://localhost:8000/recommen](http://localhost:8000/recommendations)
 ```
 
 ---
