@@ -5,35 +5,24 @@ import { useAuth } from "@clerk/nextjs";
 import { RedirectToSignIn } from "@clerk/nextjs";
 import Navbar from "../../component/Navbar";
 import RecommendationCard from "../../component/RecommendationCard";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
-/**
- * Define the shape of a recommendation object.
- * Adjust as needed to match your backend response.
- */
+const COLORS = {
+  TRANSFER: "#34D399",  // green
+  DONATE: "#A78BFA",    // purple
+  DISCOUNT: "#FBBF24",  // yellow
+  MONITOR: "#EC4899",   // pink
+};
+
 interface Recommendation {
   id: number;
   Recommendation: string;
   [key: string]: unknown;
 }
 
-const COLORS: Record<string, string> = {
-  TRANSFER: "#34D399", // green
-  DONATE: "#A78BFA", // purple
-  DISCOUNT: "#FBBF24", // yellow
-  MONITOR: "#EC4899", // pink
-};
-
 export default function DashboardPage() {
   const { userId } = useAuth();
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
 
@@ -43,33 +32,8 @@ export default function DashboardPage() {
         const res = await fetch("http://localhost:8000/recommendations", {
           cache: "no-store",
         });
-        const data: unknown = await res.json();
-
-        // validate and map data safely
-        if (Array.isArray(data)) {
-          const typedData: Recommendation[] = data.map((rec) => {
-            if (
-              typeof rec === "object" &&
-              rec !== null &&
-              "id" in rec &&
-              "Recommendation" in rec
-            ) {
-              return {
-                ...(rec as Recommendation),
-                Recommendation: String(
-                  (rec as Recommendation).Recommendation
-                ).toUpperCase(),
-              };
-            }
-            return {
-              id: -1,
-              Recommendation: "UNKNOWN",
-            };
-          });
-          setRecommendations(typedData);
-        } else {
-          console.error("Unexpected data format:", data);
-        }
+        const data = await res.json();
+        setRecommendations(data);
       } catch (err) {
         console.error("Failed to fetch recommendations:", err);
       } finally {
@@ -84,26 +48,23 @@ export default function DashboardPage() {
     return <RedirectToSignIn />;
   }
 
-  const summaryData = ["TRANSFER", "DONATE", "DISCOUNT", "MONITOR"].map(
-    (type) => ({
-      name: type,
-      value: recommendations.filter(
-        (rec) => rec.Recommendation === type
-      ).length,
-    })
-  );
+  // prepare data for pie chart
+  const summaryData = ["TRANSFER", "DONATE", "DISCOUNT", "MONITOR"].map(type => ({
+    name: type,
+    value: recommendations.filter(rec => rec.Recommendation === type).length,
+  }));
 
+  // filter data
   const filteredData = filter
-    ? recommendations.filter((rec) => rec.Recommendation === filter)
+    ? recommendations.filter(rec => rec.Recommendation === filter)
     : recommendations;
 
   return (
     <>
       <Navbar />
-      <div
-        className="min-h-screen pt-24 bg-gray-50 dark:bg-gray-900
-          text-gray-900 dark:text-gray-100 flex flex-col px-4"
-      >
+      <div className="min-h-screen pt-24 bg-gray-50 dark:bg-gray-900 
+          text-gray-900 dark:text-gray-100 flex flex-col px-4">
+        
         <div className="w-full max-w-6xl mx-auto space-y-10">
           <h1 className="text-4xl font-bold">Hello 👋</h1>
 
@@ -113,7 +74,7 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          {/* Pie Chart Summary */}
+          {/* 🥧 Pie Chart Summary */}
           <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow">
             <h2 className="text-2xl font-bold mb-6">📊 Summary</h2>
             <div className="w-full h-72">
@@ -131,7 +92,7 @@ export default function DashboardPage() {
                     {summaryData.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={COLORS[entry.name] || "#999999"}
+                        fill={COLORS[entry.name as keyof typeof COLORS]}
                       />
                     ))}
                   </Pie>
@@ -142,9 +103,9 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Filter Bar */}
+          {/* 🛠 Filter Bar */}
           <div className="flex flex-wrap gap-4 justify-center mt-8">
-            {["TRANSFER", "DONATE", "DISCOUNT", "MONITOR"].map((type) => (
+            {["TRANSFER", "DONATE", "DISCOUNT", "MONITOR"].map(type => (
               <button
                 key={type}
                 onClick={() => setFilter(filter === type ? null : type)}
@@ -170,7 +131,7 @@ export default function DashboardPage() {
             </button>
           </div>
 
-          {/* Recommendations */}
+          {/* 🚀 Recommendations */}
           <div className="mt-10">
             <h2 className="text-2xl font-bold mb-6">
               {filter ? `Showing: ${filter}` : "All Recommendations"}
@@ -179,8 +140,8 @@ export default function DashboardPage() {
               <div className="text-center py-10">Loading recommendations...</div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredData.map((rec) => (
-                  <RecommendationCard key={rec.id} rec={rec} />
+                {filteredData.map((rec, idx) => (
+                  <RecommendationCard key={idx} rec={rec} />
                 ))}
               </div>
             )}
