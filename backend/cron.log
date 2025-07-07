@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/Users/saurabhyadav/Desktop/Hackerthon/smart-waste-dashboard/backend/predict.py", line 1, in <module>
+    from main_model_script import SmartInventoryOptimizer
+  File "/Users/saurabhyadav/Desktop/Hackerthon/smart-waste-dashboard/backend/main_model_script.py", line 2, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
+Traceback (most recent call last):
+  File "/Users/saurabhyadav/Desktop/Hackerthon/smart-waste-dashboard/backend/predict.py", line 1, in <module>
+    from main_model_script import SmartInventoryOptimizer
+  File "/Users/saurabhyadav/Desktop/Hackerthon/smart-waste-dashboard/backend/main_model_script.py", line 2, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
