@@ -44,7 +44,7 @@ bun install
 ---
 
 
-### Update env 
+###✅ Update env ✅
 
 ### 3. Run the Backend (FastAPI)
 
