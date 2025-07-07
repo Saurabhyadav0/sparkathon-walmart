@@ -58,7 +58,7 @@ uvicorn app:app --reload --port 8000
 ✅ The backend will be running at:
 
 ```
-[http://localhost:8000/recommen](http://localhost:8000/recommendations)
+[http://localhost:8000/recommendations]
 ```
 
 ---
