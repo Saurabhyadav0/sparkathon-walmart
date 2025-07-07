@@ -21,7 +21,7 @@ Follow these steps to run the project locally.
 First, clone the project to your local machine:
 
 ```bash
-[git clone https://github.com/your-username/smart-waste-dashboard.git]
+git clone https://github.com/your-username/smart-waste-dashboard.git
 cd smart-waste-dashboard
 ````
 
@@ -58,7 +58,7 @@ uvicorn app:app --reload --port 8000
 ✅ The backend will be running at:
 
 ```
-[http://localhost:8000/recommendations]
+http://localhost:8000/recommendations
 ```
 
 ---
@@ -87,7 +87,7 @@ http://localhost:3000
 
 ## ✔️ Access the Dashboard
 
-* Backend API → [http://localhost:8000](http://localhost:8000)
+* Backend API → [http://localhost:8000](http://localhost:8000/recommendations)
 * Frontend → [http://localhost:3000](http://localhost:3000)
 
 Make sure both the backend and frontend are running for the app to work correctly.
