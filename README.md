@@ -1,8 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Excellent! Below is the **complete README.md** ready for copy-pasting **as Markdown**—no placeholders, no partial code. Just grab this entire block and save it as `README.md` in your project.
 
-## Getting Started
+Everything is included as pure Markdown syntax.
 
-First, run the development server:
+---
+
+## ✅ **FULL README.md (Copy this!)**
+
+````markdown
+# Smart Waste Dashboard
+
+This is a [Next.js](https://nextjs.org) + FastAPI project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+It provides a Smart Waste Tracker Dashboard with data fetched from a Python FastAPI backend.
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to run the project locally.
+
+---
+
+### 1. Clone the Repository
+
+First, clone the project to your local machine:
+
+```bash
+git clone https://github.com/your-username/smart-waste-dashboard.git
+cd smart-waste-dashboard
+````
+
+*(Replace `your-username` with your GitHub username or repo owner.)*
+
+---
+
+### 2. Install Frontend Dependencies
+
+From the project root folder, install the frontend dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+---
+
+### 3. Run the Backend (FastAPI)
+
+In a **new terminal window/tab**, start the backend server:
+
+```bash
+cd backend
+uvicorn app:app --reload --port 8000
+```
+
+✅ The backend will be running at:
+
+```
+http://localhost:8000
+```
+
+---
+
+### 4. Run the Frontend (Next.js)
+
+In **another terminal window/tab**, from the project root, run:
 
 ```bash
 npm run dev
@@ -14,23 +81,48 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This starts the Next.js development server at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## ✔️ Access the Dashboard
 
-To learn more about Next.js, take a look at the following resources:
+* Backend API → [http://localhost:8000](http://localhost:8000)
+* Frontend → [http://localhost:3000](http://localhost:3000)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Make sure both the backend and frontend are running for the app to work correctly.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📚 Learn More
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+* [Next.js Documentation](https://nextjs.org/docs)
+* [FastAPI Documentation](https://fastapi.tiangolo.com/)
+* [Learn Next.js](https://nextjs.org/learn)
+* [Vercel Deployment](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🌐 Deploy on Vercel
+
+The easiest way to deploy your Next.js app is with [Vercel](https://vercel.com/).
+
+See [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for details.
+
+````
+
+---
+
+✅ **How to use this**
+
+- Copy everything from the triple backticks ```markdown ... ```  
+- Paste it into a file called **`README.md`** in the root of your repo.
+
+That’s it!
+
+Let me know your repo URL if you’d like me to fill it in directly.
+````
