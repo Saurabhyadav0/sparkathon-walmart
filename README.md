@@ -1,5 +1,5 @@
 
-## ✅ **FULL README.md (Copy this!)**
+## ✅ **FULL README.md **
 
 
 # Smart Waste Dashboard
