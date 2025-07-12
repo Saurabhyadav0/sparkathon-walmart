@@ -12,7 +12,7 @@ const COLORS = {
   DISCOUNT: "#FBBF24",  // yellow
   DONATE: "#A78BFA",    // purple
   MONITOR: "#EC4899",   // pink
-  NONE: "#38BDF8",      // sky blue ✅ updated
+  NONE: "#38BDF8",      // sky blue
 };
 
 interface Recommendation {
@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
 
-  const knownTypes = ["TRANSFER", "DISCOUNT", "DONATE", "MONITOR"]; // ✅ reordered
+  const knownTypes = ["TRANSFER", "DISCOUNT", "DONATE", "MONITOR"];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,32 +51,46 @@ export default function DashboardPage() {
     return <RedirectToSignIn />;
   }
 
-  // prepare data for pie chart
-  const summaryData = [
+  // Calculate full summary counts
+  const fullSummaryData = [
     ...knownTypes.map(type => ({
       name: type,
-      value: recommendations.filter(rec => rec.Recommendation === type).length,
+      value: recommendations.filter(
+        rec => rec.Recommendation?.trim().toUpperCase() === type
+      ).length,
     })),
     {
       name: "NONE",
-      value: recommendations.filter(rec => !knownTypes.includes(rec.Recommendation)).length,
+      value: recommendations.filter(
+        rec => !knownTypes.includes(rec.Recommendation?.trim().toUpperCase())
+      ).length,
     },
   ];
 
-  // filter data
+  // If filter is active, only show that filter's data in pie chart
+  const filteredSummaryData = filter
+    ? fullSummaryData.filter(d => d.name === filter)
+    : fullSummaryData;
+
+  // filter recommendation list by selected filter or show all
   const filteredData =
     filter === "NONE"
-      ? recommendations.filter(rec => !knownTypes.includes(rec.Recommendation))
+      ? recommendations.filter(
+          rec => !knownTypes.includes(rec.Recommendation?.trim().toUpperCase())
+        )
       : filter
-      ? recommendations.filter(rec => rec.Recommendation === filter)
+      ? recommendations.filter(
+          rec => rec.Recommendation?.trim().toUpperCase() === filter
+        )
       : recommendations;
 
   return (
     <>
       <Navbar />
-      <div className="min-h-screen pt-24 bg-gray-50 dark:bg-gray-900 
-          text-gray-900 dark:text-gray-100 flex flex-col px-4">
-        
+      <div
+        className="min-h-screen pt-24 bg-gray-50 dark:bg-gray-900 
+          text-gray-900 dark:text-gray-100 flex flex-col px-4"
+      >
         <div className="w-full max-w-6xl mx-auto space-y-10">
           <h1 className="text-4xl font-bold">Hello 👋</h1>
 
@@ -95,13 +109,13 @@ export default function DashboardPage() {
                   <Pie
                     dataKey="value"
                     isAnimationActive
-                    data={summaryData}
+                    data={filteredSummaryData}
                     cx="50%"
                     cy="50%"
                     outerRadius={90}
                     label
                   >
-                    {summaryData.map((entry, index) => (
+                    {filteredSummaryData.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[entry.name as keyof typeof COLORS]}
@@ -117,7 +131,7 @@ export default function DashboardPage() {
 
           {/* 🛠 Filter Bar */}
           <div className="flex flex-wrap gap-4 justify-center mt-8">
-            {["TRANSFER", "DISCOUNT", "DONATE", "MONITOR", "NONE"].map(type => ( // ✅ reordered
+            {["TRANSFER", "DISCOUNT", "DONATE", "MONITOR", "NONE"].map(type => (
               <button
                 key={type}
                 onClick={() => setFilter(filter === type ? null : type)}
