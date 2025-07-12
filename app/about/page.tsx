@@ -22,7 +22,7 @@ export default function AboutPage() {
           The core of the system is a machine learning model trained on historical inventory and sales data. It classifies each product into one of four categories:
         </p>
         <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 pl-4">
-          <li><strong>Transfer</strong> — Move inventory to a location where it's more likely to sell.</li>
+          <li><strong>Transfer</strong> — Move inventory to a location where it&apos;s more likely to sell.</li>
           <li><strong>Donate</strong> — Suggest donation for items nearing expiration or with no demand.</li>
           <li><strong>Discount</strong> — Apply discounts to accelerate sales of stagnant stock.</li>
           <li><strong>Monitor</strong> — Keep tracking the item until enough data is available to act.</li>
@@ -34,7 +34,7 @@ export default function AboutPage() {
         </p>
 
         <p className="text-md text-gray-700 dark:text-gray-300">
-          Whether you're managing a retail store, a warehouse, or a donation center, Smart Waste Tracker helps you get the most value out of every item in your inventory.
+          Whether you&apos;re managing a retail store, a warehouse, or a donation center, Smart Waste Tracker helps you get the most value out of every item in your inventory.
         </p>
       </div>
     </div>
