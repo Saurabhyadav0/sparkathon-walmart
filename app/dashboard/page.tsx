@@ -9,9 +9,10 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recha
 
 const COLORS = {
   TRANSFER: "#34D399",  // green
-  DONATE: "#A78BFA",    // purple
   DISCOUNT: "#FBBF24",  // yellow
+  DONATE: "#A78BFA",    // purple
   MONITOR: "#EC4899",   // pink
+  NONE: "#38BDF8",      // sky blue ✅ updated
 };
 
 interface Recommendation {
@@ -22,9 +23,11 @@ interface Recommendation {
 
 export default function DashboardPage() {
   const { userId } = useAuth();
-const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
+
+  const knownTypes = ["TRANSFER", "DISCOUNT", "DONATE", "MONITOR"]; // ✅ reordered
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,15 +52,24 @@ const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   }
 
   // prepare data for pie chart
-  const summaryData = ["TRANSFER", "DONATE", "DISCOUNT", "MONITOR"].map(type => ({
-    name: type,
-    value: recommendations.filter(rec => rec.Recommendation === type).length,
-  }));
+  const summaryData = [
+    ...knownTypes.map(type => ({
+      name: type,
+      value: recommendations.filter(rec => rec.Recommendation === type).length,
+    })),
+    {
+      name: "NONE",
+      value: recommendations.filter(rec => !knownTypes.includes(rec.Recommendation)).length,
+    },
+  ];
 
   // filter data
-  const filteredData = filter
-    ? recommendations.filter(rec => rec.Recommendation === filter)
-    : recommendations;
+  const filteredData =
+    filter === "NONE"
+      ? recommendations.filter(rec => !knownTypes.includes(rec.Recommendation))
+      : filter
+      ? recommendations.filter(rec => rec.Recommendation === filter)
+      : recommendations;
 
   return (
     <>
@@ -105,7 +117,7 @@ const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
           {/* 🛠 Filter Bar */}
           <div className="flex flex-wrap gap-4 justify-center mt-8">
-            {["TRANSFER", "DONATE", "DISCOUNT", "MONITOR"].map(type => (
+            {["TRANSFER", "DISCOUNT", "DONATE", "MONITOR", "NONE"].map(type => ( // ✅ reordered
               <button
                 key={type}
                 onClick={() => setFilter(filter === type ? null : type)}
