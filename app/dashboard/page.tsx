@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth,useUser } from "@clerk/nextjs";
 import { RedirectToSignIn } from "@clerk/nextjs";
 import Navbar from "../../component/Navbar";
 import RecommendationCard from "../../component/RecommendationCard";
@@ -34,6 +34,7 @@ interface Recommendation {
 
 export default function DashboardPage() {
   const { userId } = useAuth();
+  const { user } = useUser();
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
@@ -61,6 +62,7 @@ export default function DashboardPage() {
   if (!userId) {
     return <RedirectToSignIn />;
   }
+  const username = user?.firstName || user?.username || "User";
 
   const fullSummaryData = [
     ...knownTypes.map(type => ({
@@ -100,7 +102,7 @@ export default function DashboardPage() {
           text-gray-900 dark:text-gray-100 flex flex-col px-4"
       >
         <div className="w-full max-w-6xl mx-auto space-y-10">
-          <h1 className="text-4xl font-bold">Hello 👋</h1>
+          <h1 className="text-4xl font-bold">Hello {username}</h1>
 
           <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow">
             <p className="text-lg text-gray-700 dark:text-gray-300">
@@ -145,7 +147,9 @@ export default function DashboardPage() {
         <BarChart data={filteredSummaryData}>
           <XAxis dataKey="name" tick={{ fill: '#ffffff' }} />
           <YAxis domain={[0, 'dataMax + 20'] } tick={{ fill: '#ffffff' }} />
-          <Tooltip />
+          <Tooltip contentStyle={{ backgroundColor: '#fff', color: '#000' }}
+          labelStyle={{ color: '#000' }}
+ />
           <Bar
             dataKey="value"
             label={{
