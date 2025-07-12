@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
-import ToggleButton from "./theme/ToggleButton"
+import Link from "next/link";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import ToggleButton from "./theme/ToggleButton";
 
 export default function Navbar() {
   return (
@@ -21,6 +21,17 @@ export default function Navbar() {
 
         <div className="flex items-center space-x-4">
           <ToggleButton />
+
+          {/* 🆕 About Button */}
+          <Link
+            href="/about"
+            className="text-sm font-medium px-3 py-2 rounded-md 
+              text-gray-800 dark:text-gray-100 hover:bg-gray-200 
+              dark:hover:bg-gray-700 transition"
+          >
+            About
+          </Link>
+
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
@@ -36,5 +47,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }

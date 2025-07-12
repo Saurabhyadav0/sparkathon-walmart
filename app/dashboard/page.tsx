@@ -1,17 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth,useUser } from "@clerk/nextjs";
 import { RedirectToSignIn } from "@clerk/nextjs";
 import Navbar from "../../component/Navbar";
 import RecommendationCard from "../../component/RecommendationCard";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const COLORS = {
   TRANSFER: "#34D399",  // green
-  DONATE: "#A78BFA",    // purple
   DISCOUNT: "#FBBF24",  // yellow
+  DONATE: "#A78BFA",    // purple
   MONITOR: "#EC4899",   // pink
+  NONE: "#38BDF8",      // sky blue
 };
 
 interface Recommendation {
@@ -22,9 +34,12 @@ interface Recommendation {
 
 export default function DashboardPage() {
   const { userId } = useAuth();
-const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const { user } = useUser();
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
+
+  const knownTypes = ["TRANSFER", "DISCOUNT", "DONATE", "MONITOR"];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,65 +62,120 @@ const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   if (!userId) {
     return <RedirectToSignIn />;
   }
+  const username = user?.firstName || user?.username || "User";
 
-  // prepare data for pie chart
-  const summaryData = ["TRANSFER", "DONATE", "DISCOUNT", "MONITOR"].map(type => ({
-    name: type,
-    value: recommendations.filter(rec => rec.Recommendation === type).length,
-  }));
+  const fullSummaryData = [
+    ...knownTypes.map(type => ({
+      name: type,
+      value: recommendations.filter(
+        rec => rec.Recommendation?.trim().toUpperCase() === type
+      ).length,
+    })),
+    {
+      name: "NONE",
+      value: recommendations.filter(
+        rec => !knownTypes.includes(rec.Recommendation?.trim().toUpperCase())
+      ).length,
+    },
+  ];
 
-  // filter data
-  const filteredData = filter
-    ? recommendations.filter(rec => rec.Recommendation === filter)
-    : recommendations;
+  const filteredSummaryData = filter
+    ? fullSummaryData.filter(d => d.name === filter)
+    : fullSummaryData;
+
+  const filteredData =
+    filter === "NONE"
+      ? recommendations.filter(
+          rec => !knownTypes.includes(rec.Recommendation?.trim().toUpperCase())
+        )
+      : filter
+      ? recommendations.filter(
+          rec => rec.Recommendation?.trim().toUpperCase() === filter
+        )
+      : recommendations;
 
   return (
     <>
       <Navbar />
-      <div className="min-h-screen pt-24 bg-gray-50 dark:bg-gray-900 
-          text-gray-900 dark:text-gray-100 flex flex-col px-4">
-        
+      <div
+        className="min-h-screen pt-24 bg-gray-50 dark:bg-gray-900 
+          text-gray-900 dark:text-gray-100 flex flex-col px-4"
+      >
         <div className="w-full max-w-6xl mx-auto space-y-10">
-          <h1 className="text-4xl font-bold">Hello 👋</h1>
+          <h1 className="text-4xl font-bold">Hello {username}</h1>
 
           <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow">
             <p className="text-lg text-gray-700 dark:text-gray-300">
-              Welcome to your Smart Waste Tracker dashboard.
+             Track and optimize your waste management with smart, real-time recommendations.
             </p>
           </div>
 
-          {/* 🥧 Pie Chart Summary */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-6">📊 Summary</h2>
-            <div className="w-full h-72">
-              <ResponsiveContainer>
-                <PieChart>
-                  <Pie
-                    dataKey="value"
-                    isAnimationActive
-                    data={summaryData}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={90}
-                    label
-                  >
-                    {summaryData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[entry.name as keyof typeof COLORS]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
+          {/* 🥧📊 Pie + Bar Chart Summary */}
+<div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow">
+  <h2 className="text-2xl font-bold mb-6">📊 Summary</h2>
+
+  <div className="flex flex-col lg:flex-row gap-6 h-[400px] w-full items-center justify-center">
+    {/* Pie Chart */}
+    <div className="w-full lg:w-1/2 h-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            dataKey="value"
+            isAnimationActive
+            data={filteredSummaryData}
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
+            label
+          >
+            {filteredSummaryData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[entry.name as keyof typeof COLORS]}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+
+    {/* Bar Chart */}
+    <div className="w-full lg:w-1/2 h-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={filteredSummaryData}>
+          <XAxis dataKey="name" tick={{ fill: '#ffffff' }} />
+          <YAxis domain={[0, 'dataMax + 20'] } tick={{ fill: '#ffffff' }} />
+          <Tooltip contentStyle={{ backgroundColor: '#fff', color: '#000' }}
+          labelStyle={{ color: '#000' }}
+ />
+          <Bar
+            dataKey="value"
+            label={{
+              position: "top",
+              fill: "#fff",
+              fontSize: 14,
+              fontWeight: 600,
+            }}
+          >
+            {filteredSummaryData.map((entry, index) => (
+              <Cell
+                key={`bar-${index}`}
+                fill={COLORS[entry.name as keyof typeof COLORS]}
+              />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  </div>
+</div>
+
 
           {/* 🛠 Filter Bar */}
           <div className="flex flex-wrap gap-4 justify-center mt-8">
-            {["TRANSFER", "DONATE", "DISCOUNT", "MONITOR"].map(type => (
+            {["TRANSFER", "DISCOUNT", "DONATE", "MONITOR", "NONE"].map(type => (
               <button
                 key={type}
                 onClick={() => setFilter(filter === type ? null : type)}
