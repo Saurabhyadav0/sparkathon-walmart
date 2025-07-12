@@ -96,7 +96,7 @@ export default function DashboardPage() {
 
           <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow">
             <p className="text-lg text-gray-700 dark:text-gray-300">
-              Welcome to your Smart Waste Tracker dashboard.
+              Track and optimize your waste management with smart, real-time recommendations.
             </p>
           </div>
 
