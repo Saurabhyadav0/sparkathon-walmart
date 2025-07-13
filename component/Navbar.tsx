@@ -20,9 +20,27 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center space-x-4">
-          <ToggleButton />
+          {/* 🆕 Dashboard Button */}
+          <Link
+            href="/dashboard"
+            className="text-sm font-medium px-3 py-2 rounded-md 
+              text-gray-800 dark:text-gray-100 hover:bg-gray-200 
+              dark:hover:bg-gray-700 transition"
+          >
+            Dashboard
+          </Link>
 
-          {/* 🆕 About Button */}
+          {/* 🆕 Inventory Button */}
+          <Link
+            href="/inventory"
+            className="text-sm font-medium px-3 py-2 rounded-md 
+              text-gray-800 dark:text-gray-100 hover:bg-gray-200 
+              dark:hover:bg-gray-700 transition"
+          >
+            Inventory
+          </Link>
+
+          {/* About Button */}
           <Link
             href="/about"
             className="text-sm font-medium px-3 py-2 rounded-md 
@@ -32,6 +50,10 @@ export default function Navbar() {
             About
           </Link>
 
+          {/* Toggle Theme */}
+          <ToggleButton />
+
+          {/* Auth */}
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>

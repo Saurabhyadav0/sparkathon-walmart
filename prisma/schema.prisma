@@ -10,19 +10,30 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DB_URI")
+  url      = env("DATABASE_URL")
 }
 
 model Product {
-  id               Int     @id @default(autoincrement())
-  itemName         String
-  currentStore     String
-  storeID          String
-  stockQty         Int
-  daysUntilExpiry  Int
-  recommendation   String
-  actionQty        Float?
-  actionPct        String?
-  targetStore      String?
-  transferQty      Float?
+  id                     Int     @id @default(autoincrement())
+  ItemName               String
+  Brand                  String
+  Category               String
+  StockQty               Int
+  ArrivalDate            DateTime
+  ExpiryDate             DateTime
+  DaysUntilExpiry        Float
+  DailySaleAvg           Float
+  SpoilageChance         Float
+  SuggestedAction        String
+  StoreLocation          String
+  IsSpoiled              Boolean
+  OnPromotion            String
+  TemperatureSensitive   Boolean
+  StoreID                String
+  Zone                   String?
+  TemperatureSupport     String?
+  DistanceToNearestStore Float
+  AvgDailySaleInNearbyStores Float
+   recommendation         String? 
 }
+

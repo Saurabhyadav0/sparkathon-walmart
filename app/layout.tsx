@@ -2,7 +2,8 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "next-themes";
 import { Providers } from "../providers/Providers";
-import Footer from "../component/footer"; // 
+import Footer from "../component/footer"; //
+import Navbar from "@/component/Navbar";
 
 export const metadata = {
   title: "Smart Waste Tracker",
@@ -20,6 +21,7 @@ export default function RootLayout({
         <ClerkProvider>
           <Providers>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <Navbar /> {/* ✅ Add Navbar here */}
               <main className="flex-grow">{children}</main> {/* ✅ Wrap in <main> for spacing */}
               <Footer /> {/* ✅ Add footer here */}
             </ThemeProvider>

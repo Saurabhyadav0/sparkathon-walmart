@@ -1,19 +1,29 @@
 "use client";
 
+import { useState, useMemo } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
+
 export default function RecommendationCard({ rec }: { rec: any }) {
   const recommendation = rec.Recommendation?.toUpperCase();
+  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
 
-  const badgeStyle = {
-    TRANSFER:
-      "bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-200",
-    DONATE:
-      "bg-purple-100 text-purple-800 dark:bg-purple-600 dark:text-purple-200",
-    DISCOUNT:
-      "bg-yellow-100 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-200",
-    MONITOR:
-      "bg-pink-100 text-pink-800 dark:bg-pink-600 dark:text-pink-200",
-    NONE:
-      "bg-sky-100 text-sky-800 dark:bg-sky-600 dark:text-sky-200",
+  // Memoize the badge styles (good if many renders)
+  const badgeStyle = useMemo(() => ({
+    TRANSFER: "bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-200",
+    DONATE: "bg-purple-100 text-purple-800 dark:bg-purple-600 dark:text-purple-200",
+    DISCOUNT: "bg-yellow-100 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-200",
+    MONITOR: "bg-pink-100 text-pink-800 dark:bg-pink-600 dark:text-pink-200",
+    NONE: "bg-sky-100 text-sky-800 dark:bg-sky-600 dark:text-sky-200",
+  }), []);
+
+  const handleAction = () => {
+    setLoading(true);
+    setDone(false);
+    setTimeout(() => {
+      setLoading(false);
+      setDone(true);
+    }, 2000);
   };
 
   return (
@@ -67,6 +77,39 @@ export default function RecommendationCard({ rec }: { rec: any }) {
           </span>
         </p>
       )}
+
+      <div className="mt-6 flex flex-col items-start space-y-2">
+        {!loading && !done && (
+          <button
+            onClick={handleAction}
+            className="px-5 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 transition"
+          >
+            {recommendation === "DONATE" ? "Donate Now" :
+             recommendation === "TRANSFER" ? "Transfer Now" :
+             recommendation === "DISCOUNT" ? "Apply Discount" :
+             recommendation === "MONITOR" ? "Monitor Item" :
+             "Proceed"}
+          </button>
+        )}
+
+        {loading && (
+          <div className="flex items-center space-x-2">
+            <ClipLoader color="#6366F1" size={28} />
+            <span className="text-gray-800 dark:text-gray-100 text-sm">
+              Processing...
+            </span>
+          </div>
+        )}
+
+        {done && (
+          <div className="text-green-600 dark:text-green-300 text-sm font-semibold">
+            ✅ {recommendation === "DONATE" ? "Donation completed!" :
+                recommendation === "TRANSFER" ? "Transfer done!" :
+                recommendation === "DISCOUNT" ? "Discount applied!" :
+                "Action completed!"}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
