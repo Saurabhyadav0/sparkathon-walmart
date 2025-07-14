@@ -1,8 +1,21 @@
+// "use client";
+
+// export default function Footer() {
+//   return (
+//     <footer className="relative z-10 text-center text-sm text-gray-500 dark:text-gray-400 py-6">
+//         Made with ❤️ by team Sparkers  © 2025 Smart Waste Tracker — Empowering a Cleaner Future ♻️
+//     </footer>
+//   );
+// }
+
+
+
+
 "use client";
 import { useEffect, useState } from "react";
 
 export default function Footer() {
-  const [showTop, setShowTop] = useState(false);
+   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,9 +30,10 @@ export default function Footer() {
   };
 
   return (
+   
     <footer className="bg-black text-gray-300 text-center py-6 relative">
       <p> Made with ❤️ by team Sparkers</p>
-      <p>© 2025 Smart Waste Tracker</p>
+      <p>  © 2025 Smart Waste Tracker — Empowering a Cleaner Future ♻️</p>
 
       {showTop && (
         <button
