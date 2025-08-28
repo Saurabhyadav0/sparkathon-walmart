@@ -7,6 +7,7 @@ import math
 origins = [
     "http://localhost:3000",
     "http://localhost:3001",
+    "https://sparkathon-walmart.vercel.app/"
 ]
 
 app = FastAPI()
@@ -18,6 +19,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/api/hello")
+def hello():
+    return {"message": "Hello from backend"}
+
+
+@app.get("/")
+def root():
+    return {"message": "Backend is running!"}
 
 @app.get("/recommendations")
 def get_recommendations():
