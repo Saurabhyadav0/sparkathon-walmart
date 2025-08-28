@@ -44,7 +44,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8000/recommendations", {
+        const res = await fetch("https://sparkathon-walmart.onrender.com/recommendations", {
           cache: "no-store",
         });
         const data = await res.json();
