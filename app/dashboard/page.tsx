@@ -44,9 +44,12 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("https://sparkathon-walmart.onrender.com/recommendations", {
-          cache: "no-store",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/recommendations`,
+          {
+            cache: "no-store",
+          }
+        );
         const data = await res.json();
         setRecommendations(data);
       } catch (err) {
@@ -65,32 +68,33 @@ export default function DashboardPage() {
   const username = user?.firstName || user?.username || "User";
 
   const fullSummaryData = [
-    ...knownTypes.map(type => ({
+    ...knownTypes.map((type) => ({
       name: type,
       value: recommendations.filter(
-        rec => rec.Recommendation?.trim().toUpperCase() === type
+        (rec) => rec.Recommendation?.trim().toUpperCase() === type
       ).length,
     })),
     {
       name: "NONE",
       value: recommendations.filter(
-        rec => !knownTypes.includes(rec.Recommendation?.trim().toUpperCase())
+        (rec) => !knownTypes.includes(rec.Recommendation?.trim().toUpperCase())
       ).length,
     },
   ];
 
   const filteredSummaryData = filter
-    ? fullSummaryData.filter(d => d.name === filter)
+    ? fullSummaryData.filter((d) => d.name === filter)
     : fullSummaryData;
 
   const filteredData =
     filter === "NONE"
       ? recommendations.filter(
-          rec => !knownTypes.includes(rec.Recommendation?.trim().toUpperCase())
+          (rec) =>
+            !knownTypes.includes(rec.Recommendation?.trim().toUpperCase())
         )
       : filter
       ? recommendations.filter(
-          rec => rec.Recommendation?.trim().toUpperCase() === filter
+          (rec) => rec.Recommendation?.trim().toUpperCase() === filter
         )
       : recommendations;
 
@@ -99,12 +103,14 @@ export default function DashboardPage() {
       <Navbar />
       <div className="min-h-screen pt-24 bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-black text-gray-900 dark:text-gray-100 px-4 transition-all duration-700">
         <div className="max-w-7xl mx-auto space-y-12">
-
           {/* 👋 Welcome Header */}
           <div className="flex flex-col gap-4">
-            <h1 className="text-4xl sm:text-5xl font-extrabold">Welcome, {username} 👋</h1>
+            <h1 className="text-4xl sm:text-5xl font-extrabold">
+              Welcome, {username} 👋
+            </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300">
-              Here’s an overview of your current waste recommendations and insights.
+              Here’s an overview of your current waste recommendations and
+              insights.
             </p>
           </div>
 
@@ -114,9 +120,19 @@ export default function DashboardPage() {
               <h2 className="text-2xl font-bold mb-4">📊 Summary Overview</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
-                  <Pie dataKey="value" data={filteredSummaryData} cx="50%" cy="50%" outerRadius={100} label>
+                  <Pie
+                    dataKey="value"
+                    data={filteredSummaryData}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label
+                  >
                     {filteredSummaryData.map((entry, index) => (
-                      <Cell key={`pie-${index}`} fill={COLORS[entry.name as keyof typeof COLORS]} />
+                      <Cell
+                        key={`pie-${index}`}
+                        fill={COLORS[entry.name as keyof typeof COLORS]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -126,7 +142,9 @@ export default function DashboardPage() {
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl transition hover:shadow-2xl">
-              <h2 className="text-2xl font-bold mb-4">📈 Recommendations Trend</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                📈 Recommendations Trend
+              </h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={filteredSummaryData}>
                   <XAxis dataKey="name" tick={{ fill: "#8884d8" }} />
@@ -134,7 +152,10 @@ export default function DashboardPage() {
                   <Tooltip />
                   <Bar dataKey="value">
                     {filteredSummaryData.map((entry, index) => (
-                      <Cell key={`bar-${index}`} fill={COLORS[entry.name as keyof typeof COLORS]} />
+                      <Cell
+                        key={`bar-${index}`}
+                        fill={COLORS[entry.name as keyof typeof COLORS]}
+                      />
                     ))}
                   </Bar>
                 </BarChart>
@@ -144,19 +165,21 @@ export default function DashboardPage() {
 
           {/* 🔘 Filter Buttons */}
           <div className="flex flex-wrap justify-center gap-3">
-            {["TRANSFER", "DISCOUNT", "DONATE", "MONITOR", "NONE"].map(type => (
-              <button
-                key={type}
-                onClick={() => setFilter(filter === type ? null : type)}
-                className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
-                  filter === type
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
-                }`}
-              >
-                {type}
-              </button>
-            ))}
+            {["TRANSFER", "DISCOUNT", "DONATE", "MONITOR", "NONE"].map(
+              (type) => (
+                <button
+                  key={type}
+                  onClick={() => setFilter(filter === type ? null : type)}
+                  className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
+                    filter === type
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  {type}
+                </button>
+              )
+            )}
             <button
               onClick={() => setFilter(null)}
               className={`px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
@@ -172,10 +195,14 @@ export default function DashboardPage() {
           {/* 🔍 Recommendation Cards */}
           <div className="mt-12 space-y-6">
             <h2 className="text-2xl font-bold">
-              {filter ? `Filtered Recommendations: ${filter}` : "All Smart Recommendations"}
+              {filter
+                ? `Filtered Recommendations: ${filter}`
+                : "All Smart Recommendations"}
             </h2>
             {loading ? (
-              <div className="text-center py-12 text-gray-500">⏳ Loading recommendations...</div>
+              <div className="text-center py-12 text-gray-500">
+                ⏳ Loading recommendations...
+              </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredData.map((rec, idx) => (
@@ -189,10 +216,6 @@ export default function DashboardPage() {
     </>
   );
 }
-
-
-
-
 
 // "use client";
 
@@ -294,7 +317,7 @@ export default function DashboardPage() {
 //     <>
 //       <Navbar />
 //       <div
-//         className="min-h-screen pt-24 bg-gray-50 dark:bg-gray-900 
+//         className="min-h-screen pt-24 bg-gray-50 dark:bg-gray-900
 //           text-gray-900 dark:text-gray-100 flex flex-col px-4"
 //       >
 //         <div className="w-full max-w-6xl mx-auto space-y-10">
@@ -368,14 +391,13 @@ export default function DashboardPage() {
 //   </div>
 // </div>
 
-
 //           {/* 🛠 Filter Bar */}
 //           <div className="flex flex-wrap gap-4 justify-center mt-8">
 //             {["TRANSFER", "DISCOUNT", "DONATE", "MONITOR", "NONE"].map(type => (
 //               <button
 //                 key={type}
 //                 onClick={() => setFilter(filter === type ? null : type)}
-//                 className={`px-4 py-2 rounded-full font-semibold 
+//                 className={`px-4 py-2 rounded-full font-semibold
 //                   transition ${
 //                     filter === type
 //                       ? "bg-blue-600 text-white"

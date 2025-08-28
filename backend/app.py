@@ -7,7 +7,7 @@ import math
 origins = [
     "http://localhost:3000",
     "http://localhost:3001",
-    "https://sparkathon-walmart.vercel.app/"
+    "https://sparkathon-walmart.vercel.app"
 ]
 
 app = FastAPI()
